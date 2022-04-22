@@ -123,7 +123,7 @@ def setup_language_dependent(cfg):
     # 언어에 따른 content_font가 정해짐
     # 그럼 content_font가 왜 .ttf 파일로 정해지나? 
     if cfg['language'] == 'kor':
-        content_font = "NanumBarunpenR.ttf"
+        content_font = "UhBee dami.ttf"
         n_comp_types = 3  # cho, jung, jong
         n_comps = kor.N_COMPONENTS
     elif cfg['language'] == 'thai':

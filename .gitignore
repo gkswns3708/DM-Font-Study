@@ -24,3 +24,6 @@ test_us/
 practice.py
 .gitignore
 output.txt
+Data
+model_weight
+Out 
