@@ -21,7 +21,12 @@ from datasets import thai_decompose as thai
 
 
 CODE_RANGE = {
-    'kor': [[0x0021, 0x007E], [0x3131, 0x3163], [0xAC00, 0xD7A3]],
+    # 한국어는 ASCII 
+    'kor': [
+        [0x0021, 0x007E], # ASCII 기준 특수문자 + 영어(소문자 + 대문자)
+        [0x3131, 0x3163], # 한글 낱개 
+        [0xAC00, 0xD7A3] # 조합성 한글 처음부터 끝까지
+    ],
     'thai': [[0x0E01, 0x0E3A], [0x0E3F, 0x0E5B]]
 }
 
@@ -31,8 +36,10 @@ def get_code_points(language):
     code_range = CODE_RANGE[language]
     for rangemin, rangemax in code_range:
         for codepoint in range(rangemin, rangemax+1):
+            # char 함수는 unicode를 string으로 바꿔줌.
             codes.add(chr(codepoint))
-
+    
+    # 즉 codes는 한국어 11172글자 + 영어 소,대문자 + 기본 특수 기호 1개씩 들어있는 set
     return codes
 
 
@@ -50,11 +57,15 @@ def dump_to_hdf5(dump_path, font_name, images, chars, compression=None):
 
 class FontProcessor(object):
     def __init__(self, language, resize_method="bilinear", font_size_factor=2, sample_size=128):
+        # 만약 Font generating 하고 싶은 language가 태국어라면 rqam라는 module을 다운 받아야 함.
         if language == 'thai':
             assert features.check('raqm'), 'Please install raqm first for thai font rendering'
 
+        # FontProcessor에 관한 log는 preparedata.log에 저장됨. level은 error
         self.logger = Logger.get(file_path='preparedata.log', level='error')
 
+
+        # 언어만 정해주면 나머지는 이미 default 값이 있으므로 그걸로 진행된다.
         self.language = language
         self.targetcodes = get_code_points(self.language)
         if resize_method == 'bilinear':
@@ -64,7 +75,9 @@ class FontProcessor(object):
         self.sample_size = sample_size
         self.font_size = self.sample_size * font_size_factor
 
-    def ord(self, char):
+    def ord(self, char): 
+        # 태국어와 한국어일 때 ord 차이.
+        # 함수 오버로딩
         if self.language == 'kor':
             return ord(char)
         elif self.language == 'thai':
@@ -74,11 +87,14 @@ class FontProcessor(object):
 
     def is_renderable_char(self, font, ch):
         ch = self.fix_char_order_if_thai(ch)
+        # python의 reduce는 누적 집계를 나타내기 위해 사용함. 연산 결과를 accmulate함.
         try:
             size = reduce(lambda x, y: x * y, font.getsize(ch))
+        # 만약 ch의 fontsize를 알아낼 수 없는 OSError(경로 error)라면 못 연다(파일이 없다) 느낌으로 logging
         except OSError:
             self.logger.warning('{}, "{}" ({}) cannot be opened'.format(font, ch, self.ord(ch)))
             return False
+        # 만약 size가 0이라면 logging(잘못된 size임) 
         if not size:
             self.logger.warning('{}, "{}" ({}) has size {}'.format(
                 font, ch, self.ord(ch), font.getsize(ch))
@@ -234,6 +250,7 @@ def main(language, fonts_dir, meta_path, dump_dir):
     fonts = [
         str(fname) for fname in fonts_dir.rglob("*.ttf") if fname.name in allfonts
     ]
+    print(len(allfonts), len(fonts))
     assert len(allfonts) == len(fonts)
 
     processor = FontProcessor(language)
