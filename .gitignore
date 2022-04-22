@@ -24,7 +24,6 @@ test_us/
 practice.py
 .gitignore
 output.txt
-TTF_files
 Data
 model_weight
 Out
