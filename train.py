@@ -214,7 +214,7 @@ def main():
         sys.exit()
 
     # time stamp를 찍기 위한 timestamp 변수 선언
-    # 아ㅋㅋ 근데 utils라는 module이 따로 있는 줄 알았는데 알고 보니, 같은 경로 상의 utils 폴더를 의미 하는 거엿음ㅋㅋㅅㅂ
+    # utils는 pip가 아닌 Project Module이다.
     timestamp = utils.timestamp()
     unique_name = "{}_{}".format(timestamp, args.name)
     # config 변수에 unique_name과 name을 등록함.
