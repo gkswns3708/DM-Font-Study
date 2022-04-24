@@ -73,6 +73,7 @@ def setup_args_and_config():
     # 그래서 해당 config들을 이용해 코드가 진행됨.
     parser = argparse.ArgumentParser('MaHFG') #Prog 인수를 MaHFG로 변경함 → 별 뜻 없음 시발
     parser.add_argument("name") 
+    # nagrs 는 값의 개수를 지정해주는 인수
     parser.add_argument("config_paths", nargs="+") 
     parser.add_argument("--show", action="store_true", default=False) 
     parser.add_argument("--resume", default=None) 
@@ -159,6 +160,7 @@ def setup_cv_dset_loader(hdf5_data, meta, val_transform, n_comp_types, content_f
     # font는 안 봤지만 character는 봤을 때
     # font도 안보고 character도 안 봤을 때
     # 위 3경우의 수로 validation을 측정 함.
+    # 논문의 어느 파트에 나오는지 ? 
     trn_chars = meta['train']['chars']
     batch_size = cfg['batch_size'] * 3
     n_workers = cfg['n_workers']
