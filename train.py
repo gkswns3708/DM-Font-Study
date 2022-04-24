@@ -73,6 +73,7 @@ def setup_args_and_config():
     # 그래서 해당 config들을 이용해 코드가 진행됨.
     parser = argparse.ArgumentParser('MaHFG') #Prog 인수를 MaHFG로 변경함 → 별 뜻 없음 시발
     parser.add_argument("name") 
+    # nargs는 값의 개수를 정하는 인수 ! 
     parser.add_argument("config_paths", nargs="+") 
     parser.add_argument("--show", action="store_true", default=False) 
     parser.add_argument("--resume", default=None) 
