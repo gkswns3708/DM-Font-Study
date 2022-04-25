@@ -18,7 +18,11 @@ from criterions import hinge_g_loss, hinge_d_loss
 
 def has_bn(model):
     for m in model.modules():
+        # is_instance(인스턴스, 데이터 or 클래스 타입)
         if isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d)):
+            # nn.BatchNorm1d : 2D 또는 3D 입력에 배치 정규화를 적용 : 내부 공변량 이동을 줄임으로써 심층 네트워크 교육
+            # nn.BatchNorm2d : 4D 입력(추가 채널 치수가 있는 2D 입력의 미니 배치)에 배치 정규화를 적용
+            # nn.BatchNorm3d : Batch Normalization(배치 정규화) 문서에 설명된 대로 5D 입력(추가 채널 치수가 있는 3D 입력의 미니 배치)에 배치 정규화를 적용
             return True
 
     return False
@@ -53,6 +57,7 @@ class Trainer:
         self.disc = disc
         self.g_optim = g_optim
         self.d_optim = d_optim
+        # auxiliary classifier Gan(AC-GAN)
         self.aux_clf = aux_clf
         self.ac_optim = ac_optim
         self.writer = writer
