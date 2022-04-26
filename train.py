@@ -233,6 +233,7 @@ def main():
                         level=args.log_lv, colorize=True)
 
     # writer
+    # 정보를 기록하고 텐서보드에 추가
     image_scale = 0.6
     writer_path = Path('runs', unique_name)
     if args.tb_image:
