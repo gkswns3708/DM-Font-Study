@@ -135,7 +135,7 @@ class Trainer:
                 "B_style": style_imgs.size(0),
                 "B_target": B
             })
-            # HI 
+           
             style_ids = style_ids.cuda()
             #  style_char_ids = style_char_ids.cuda()
             style_comp_ids = style_comp_ids.cuda()
