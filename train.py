@@ -69,21 +69,28 @@ def get_val_dset_loader(data, avail_fonts, avail_chars, trn_avail_chars, transfo
 
 
 def setup_args_and_config():
-    # 아무튼 얘네들은 나중에 args들을 args.log_lv같이 변수처럼 접근할 수 있음. 
+    # 아무튼 얘네들은 나중에 args들을 args.log_lv같이 변수처럼 접근할 수 있음.
     # 그래서 해당 config들을 이용해 코드가 진행됨.
-    parser = argparse.ArgumentParser('MaHFG') #Prog 인수를 MaHFG로 변경함 → 별 뜻 없음 시발
-    parser.add_argument("name") 
-    # nargs는 값의 개수를 정하는 인수 ! 
-    parser.add_argument("config_paths", nargs="+") 
-    parser.add_argument("--show", action="store_true", default=False) 
-    parser.add_argument("--resume", default=None) 
+
+    # Prog 인수를 MaHFG로 변경함 → 별 뜻 없음 시발
+    parser = argparse.ArgumentParser('MaHFG')
+    parser.add_argument("name")
+
+    # nargs -> 인수의 갯수 지정, + -> 1개 이상의 값을 전부 받아들인다.
+    parser.add_argument("config_paths", nargs="+")
+
+    # action = "store_true" 하면 나중에 인수를 주었을 때, args.show가 True가 됨. 인수를 안 주면, arg.show가 False(Default)
+    parser.add_argument("--show", action="store_true", default=False)
+
+    parser.add_argument("--resume", default=None)
     parser.add_argument("--log_lv", default='info')
     parser.add_argument("--debug", default=False, action="store_true")
-    parser.add_argument("--tb-image", default=False, action="store_true",
-                        help="Write image log to tensorboard") # image를 tensorboard로 시각화 함.
-                        # 우리는 아마 이 옵션을 쓰지 않거나 wandb 혹은 tb에 기록하면서 하면 좋을 듯?
-    parser.add_argument("--deterministic", default=False, action="store_true") # 잘 모르겠음
 
+    # image를 tensorboard로 시각화 함.
+    parser.add_argument("--tb-image", default=False, action="store_true",
+                        help="Write image log to tensorboard")
+    # seed 고정
+    parser.add_argument("--deterministic", default=False, action="store_true")
 
     # parse_known_args는 populated namespace와 remaining argument string을 가지는 tuple이 return 됨
     # 즉 위에서 지정해서 나온 argument들은 왼쪽에 추가적으로 argparsing된 애들은 오른쪽에 담겨짐.

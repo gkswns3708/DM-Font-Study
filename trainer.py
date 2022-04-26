@@ -79,6 +79,7 @@ class Trainer:
 
     def clear_losses(self):
         """ Integrate & clear loss dict """
+        # loss_dict에 각 g,d,ac loss 통합 및 초기화
         # g losses
         loss_dic = {k: v.item() for k, v in self.g_losses.items()}
         loss_dic['g_total'] = sum(loss_dic.values())
@@ -135,7 +136,7 @@ class Trainer:
                 "B_style": style_imgs.size(0),
                 "B_target": B
             })
-            # HI 
+            
             style_ids = style_ids.cuda()
             #  style_char_ids = style_char_ids.cuda()
             style_comp_ids = style_comp_ids.cuda()
