@@ -17,13 +17,15 @@ from criterions import hinge_g_loss, hinge_d_loss
 
 
 def has_bn(model):
+    # generator에 있는 모듈이 bn클래스의 인스턴스인지 확인하는 작업 수행
     for m in model.modules():
         # is_instance(인스턴스, 데이터 or 클래스 타입)
+        # - 특정 객체가 해당 클래스의 인스턴스인지 확인
         if isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d)):
             # nn.BatchNorm1d : 2D 또는 3D 입력에 배치 정규화를 적용 : 내부 공변량 이동을 줄임으로써 심층 네트워크 교육
             # nn.BatchNorm2d : 4D 입력(추가 채널 치수가 있는 2D 입력의 미니 배치)에 배치 정규화를 적용
             # nn.BatchNorm3d : Batch Normalization(배치 정규화) 문서에 설명된 대로 5D 입력(추가 채널 치수가 있는 3D 입력의 미니 배치)에 배치 정규화를 적용
-            return True
+            return True 
 
     return False
 
@@ -53,18 +55,22 @@ class Trainer:
                  writer, logger, evaluator, cfg):
         self.gen = gen
         self.gen_ema = copy.deepcopy(self.gen)
-        self.is_bn_gen = has_bn(self.gen)
+        self.is_bn_gen = has_bn(self.gen) # 배치 정규화 모델
         self.disc = disc
+        # Adam optimizer 
         self.g_optim = g_optim
         self.d_optim = d_optim
         # auxiliary classifier Gan(AC-GAN)
         self.aux_clf = aux_clf
         self.ac_optim = ac_optim
+        # writer & logger
         self.writer = writer
         self.logger = logger
+        # evaluator
         self.evaluator = evaluator
         self.cfg = cfg
         self.step = 1
+        # language
         self.language = cfg['language']
 
         self.g_losses = {}
@@ -129,7 +135,7 @@ class Trainer:
                 "B_style": style_imgs.size(0),
                 "B_target": B
             })
-
+            # HI 
             style_ids = style_ids.cuda()
             #  style_char_ids = style_char_ids.cuda()
             style_comp_ids = style_comp_ids.cuda()
