@@ -39,7 +39,8 @@ def weights_init(init_type='default'):
 
     return init_fun
 
-
+# L2 norm
+# 더 좋은 학습을 위해 gradient를 좀 더 smoother하게 사용하기 위해 정의 
 def spectral_norm(module):
     """ init & apply spectral norm """
     nn.init.xavier_uniform_(module.weight, 2 ** 0.5)
